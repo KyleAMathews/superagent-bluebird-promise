@@ -1,0 +1,28 @@
+{
+  "name": "superagent-bluebird-promise",
+  "description": "Add promises support to superagent using Bluebird for Promises",
+  "version": "0.0.0",
+  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/KyleAMathews/superagent-bluebird-promise/issues"
+  },
+  "homepage": "https://github.com/KyleAMathews/superagent-bluebird-promise",
+  "keywords": [
+    "superagent",
+    "promise",
+    "bluebird"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "peerDependencies": {
+    "bluebird": "^2.2.2",
+    "superagent": "^0.18.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KyleAMathews/superagent-bluebird-promise.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
