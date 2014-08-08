@@ -23,7 +23,7 @@ Request.prototype.promise = function() {
     return new Promise(function(resolve, reject){
         Request.prototype.end.call(self, function(err, res) {
             if (err) reject(err);
-            else resolve(res.body);
+            else resolve(res);
         });
     });
 };
