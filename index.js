@@ -21,7 +21,7 @@ var Request = require("superagent").Request;
 Request.prototype.promise = function() {
     var self = this;
     return new Promise(function(resolve, reject){
-        Request.prototype.end.call(self, function(err, res) {
+        self.end(function(err, res) {
             if (err) reject(err);
             else resolve(res);
         });
