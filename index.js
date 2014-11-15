@@ -19,11 +19,19 @@ var Request = require("superagent").Request;
  * @return {Bluebird.Promise}
  */
 Request.prototype.promise = function() {
-    var self = this;
-    return new Promise(function(resolve, reject){
-        self.end(function(err, res) {
-            if (err) reject(err);
-            else resolve(res);
-        });
+  var self = this;
+  return new Promise(function(resolve, reject) {
+      self.end(function(err, res) {
+        if (res.status >= 400) {
+          reject({
+            status: res.status,
+            res: res
+          });
+        } else if (err) {
+          reject(err);
+        } else {
+          resolve(res);
+        }
+      });
     });
 };
