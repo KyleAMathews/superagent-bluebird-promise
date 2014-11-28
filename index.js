@@ -22,7 +22,7 @@ Request.prototype.promise = function() {
   var self = this;
   return new Promise(function(resolve, reject) {
       self.end(function(err, res) {
-        if (res.status >= 400) {
+        if (typeof res != 'undefined' && res.status >= 400) {
           reject({
             status: res.status,
             res: res
