@@ -25,10 +25,13 @@ Request.prototype.promise = function() {
         if (typeof res != 'undefined' && res.status >= 400) {
           reject({
             status: res.status,
-            res: res
+            res: res,
+            error: res.error
           });
         } else if (err) {
-          reject(err);
+          reject({
+            error: err
+          });
         } else {
           resolve(res);
         }

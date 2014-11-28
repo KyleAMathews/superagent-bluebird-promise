@@ -22,3 +22,7 @@ request.get('/an-endpoint').promise()
     console.log(error);
   })
   ```
+
+An error is thrown for all HTTP errors and responses that have a response code of 400 or above.
+
+The `error` parameter always has a key `error` and for 4xx and 5xx responses, will also have a `status` and `res` key.
