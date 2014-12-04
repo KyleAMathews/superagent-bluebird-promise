@@ -1,6 +1,6 @@
 {
   "name": "superagent-bluebird-promise",
-  "description": "Add promises support to superagent using Bluebird for Promises",
+  "description": "Add promise support to superagent using Bluebird",
   "version": "0.5.0",
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "bugs": {
