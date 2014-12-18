@@ -1,7 +1,9 @@
 superagent-bluebird-promise
 ===========================
 
-Add promise support to superagent using Bluebird.
+Add promise support to
+[Superagent](http://visionmedia.github.io/superagent/) using
+[Bluebird](https://github.com/petkaantonov/bluebird).
 
 ## Install
 `npm install superagent-bluebird-promise`
