@@ -9,7 +9,7 @@ Add promise support to
 `npm install superagent-bluebird-promise`
 
 ## Usage
-Simple require this package somewhere in your app and then you can call `.promise()` instead of `.end()` to get a promise for your requests.
+Simply require this package somewhere in your app. Then you can call `.promise()` instead of `.end()` to get a promise for your requests.
 
 ```javascript
 
