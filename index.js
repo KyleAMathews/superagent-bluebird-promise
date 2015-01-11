@@ -2,7 +2,9 @@
 
 var Promise = require("bluebird");
 
-var Request = require("superagent").Request;
+// sometime we just want `var request = require('superagent-bluebird-promise')`
+var superagent = module.exports = require('superagent');
+var Request = superagent.Request;
 
 /**
  * @namespace utils
@@ -19,22 +21,7 @@ var Request = require("superagent").Request;
  * @return {Bluebird.Promise}
  */
 Request.prototype.promise = function() {
-  var self = this;
-  return new Promise(function(resolve, reject) {
-      self.end(function(err, res) {
-        if (typeof res != 'undefined' && res.status >= 400) {
-          reject({
-            status: res.status,
-            res: res,
-            error: res.error
-          });
-        } else if (err) {
-          reject({
-            error: err
-          });
-        } else {
-          resolve(res);
-        }
-      });
-    });
+  var defer = Promise.defer();
+  this.end(defer.callback);
+  return defer.promise;
 };
