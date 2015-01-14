@@ -2,7 +2,7 @@
 
 var Promise = require("bluebird");
 
-// sometime we just want `var request = require('superagent-bluebird-promise')`
+// So you can `var request = require('superagent-bluebird-promise')`
 var superagent = module.exports = require('superagent');
 var Request = superagent.Request;
 
