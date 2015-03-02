@@ -2,8 +2,8 @@
 
 var Promise = require("bluebird");
 
-// So you can `var request = require('superagent-bluebird-promise')`
-var superagent = module.exports = require('superagent');
+// So you can `var request = require("superagent-bluebird-promise")`
+var superagent = module.exports = require("superagent");
 var Request = superagent.Request;
 
 /**
@@ -24,7 +24,7 @@ Request.prototype.promise = function() {
   var self = this;
   return new Promise(function(resolve, reject) {
       self.end(function(err, res) {
-        if (typeof res != 'undefined' && res.status >= 400) {
+        if (typeof res !== "undefined" && res.status >= 400) {
           reject(new Error({
             status: res.status,
             res: res,
