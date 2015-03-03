@@ -25,15 +25,19 @@ Request.prototype.promise = function() {
   return new Promise(function(resolve, reject) {
       self.end(function(err, res) {
         if (typeof res !== "undefined" && res.status >= 400) {
-          reject(new Error({
-            status: res.status,
-            res: res,
-            error: res.error
-          }));
+          var msg = 'cannot ' + self.req.method + ' ' + self.req.url + ' (' + res.status + ')';
+          var error = new Error(msg);
+
+          error.status = res.status;
+          error.res = res;
+          error.error = res.error;
+
+          reject(err);
         } else if (err) {
-          reject(new Error({
-            error: err
-          }));
+          var error = new Error(err.message);
+          error.error = err;
+          
+          reject(error);
         } else {
           resolve(res);
         }
