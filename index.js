@@ -32,10 +32,12 @@ SuperagentPromiseError.prototype.constructor = SuperagentPromiseError;
  */
 Request.prototype.promise = function() {
   var self = this;
+  var error;
   return new Promise(function(resolve, reject) {
       self.end(function(err, res) {
         if (typeof res !== "undefined" && res.status >= 400) {
-          error = new SuperagentPromiseError(res.error);
+          var msg = 'cannot ' + self.req.method + ' ' + self.req._headers.host + self.req.path + ' (' + res.status + ')';
+          error = new SuperagentPromiseError(msg);
           error.status = res.status;
           error.body = res.body;
           error.res = res;

@@ -37,6 +37,7 @@ describe 'superagent-promise', ->
         expect(error.body.error).to.equal('not ok')
         expect(error).to.be.instanceof(Error)
         expect(error.name).to.equal("SuperagentPromiseError")
+        expect(error.message).to.equal("cannot GET localhost:3000/bad (400)")
 
   it 'should reject an error object when there is an http error', ->
     request.get("localhost:23423")
