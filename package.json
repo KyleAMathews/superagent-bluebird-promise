@@ -23,9 +23,17 @@
     "url": "https://github.com/KyleAMathews/superagent-bluebird-promise.git"
   },
   "scripts": {
-    "test": "jshint *.json *.js"
+    "test-watch": "NODE_ENV=test node_modules/.bin/mocha -w --recursive --compilers coffee:coffee-script/register -R mocha-unfunk-reporter",
+    "test": "jshint *.json *.js & NODE_ENV=test node_modules/.bin/mocha --recursive --compilers coffee:coffee-script/register -R mocha-unfunk-reporter"
   },
   "devDependencies": {
-    "jshint": "2.6.3"
+    "chai": "^2.1.0",
+    "coffee-script": "^1.9.1",
+    "interfake": "^1.12.1",
+    "jshint": "2.6.3",
+    "mocha": "^2.1.0",
+    "mocha-unfunk-reporter": "^0.4.0",
+    "pre-commit": "^1.0.5",
+    "underscore": "^1.8.2"
   }
 }
