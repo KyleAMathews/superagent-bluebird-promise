@@ -23,6 +23,9 @@
     "url": "https://github.com/KyleAMathews/superagent-bluebird-promise.git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jshint *.json *.js"
+  },
+  "devDependencies": {
+    "jshint": "2.6.3"
   }
 }
