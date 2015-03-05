@@ -31,13 +31,12 @@ SuperagentPromiseError.prototype.constructor = SuperagentPromiseError;
  * @return {Bluebird.Promise}
  */
 Request.prototype.promise = function() {
-  var self = this;
+  var req = this;
   var error;
   return new Promise(function(resolve, reject) {
-      self.end(function(err, res) {
+      req.end(function(err, res) {
         if (typeof res !== "undefined" && res.status >= 400) {
-          var req = res.req;
-          var msg = 'cannot ' + req.method + ' ' + req._headers.host + req.path + ' (' + res.status + ')';
+          var msg = 'cannot ' + req.method + ' ' + req.url + ' (' + res.status + ')';
           error = new SuperagentPromiseError(msg);
           error.status = res.status;
           error.body = res.body;
