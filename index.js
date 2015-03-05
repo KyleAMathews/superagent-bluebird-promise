@@ -36,7 +36,8 @@ Request.prototype.promise = function() {
   return new Promise(function(resolve, reject) {
       self.end(function(err, res) {
         if (typeof res !== "undefined" && res.status >= 400) {
-          var msg = 'cannot ' + self.req.method + ' ' + self.req._headers.host + self.req.path + ' (' + res.status + ')';
+          var req = res.req;
+          var msg = 'cannot ' + req.method + ' ' + req._headers.host + req.path + ' (' + res.status + ')';
           error = new SuperagentPromiseError(msg);
           error.status = res.status;
           error.body = res.body;
