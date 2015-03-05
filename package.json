@@ -24,11 +24,12 @@
   },
   "scripts": {
     "test-watch": "NODE_ENV=test node_modules/.bin/mocha -w --recursive --compilers coffee:coffee-script/register -R mocha-unfunk-reporter",
-    "test": "jshint *.json *.js & NODE_ENV=test node_modules/.bin/mocha --recursive --compilers coffee:coffee-script/register -R mocha-unfunk-reporter"
+    "test": "node_modules/.bin/coffeelint test/* & jshint *.json *.js & NODE_ENV=test node_modules/.bin/mocha --recursive --compilers coffee:coffee-script/register -R mocha-unfunk-reporter"
   },
   "devDependencies": {
     "chai": "^2.1.0",
     "coffee-script": "^1.9.1",
+    "coffeelint": "^1.9.2",
     "interfake": "^1.12.1",
     "jshint": "2.6.3",
     "mocha": "^2.1.0",
