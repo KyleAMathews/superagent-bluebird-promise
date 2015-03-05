@@ -40,6 +40,25 @@ describe 'superagent-promise', ->
         expect(error).to.be.instanceof(Error)
         expect(error.name).to.equal("SuperagentPromiseError")
         expect(error.message).to.equal("cannot GET localhost:3000/bad (400)")
+        done()
+
+  it 'should reject an error object when requesting
+      non-existent page', (done) ->
+    request.get("http://example.com/does-not-exist")
+      .promise()
+      .then (res) ->
+        expect(res).to.not.exist
+        done()
+      .catch (error) ->
+        expect(error).to.exist
+        expect(error.res).to.exist
+        expect(error.status).to.exist
+        expect(error.body).to.exist
+        expect(error).to.be.instanceof(Error)
+        expect(error.name).to.equal("SuperagentPromiseError")
+        expect(error.message)
+          .to.equal("cannot GET example.com/does-not-exist (404)")
+        done()
 
   it 'should reject an error object when there is an http error', ->
     request.get("localhost:23423")
