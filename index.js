@@ -28,12 +28,17 @@ SuperagentPromiseError.prototype.constructor = SuperagentPromiseError;
  * Call .promise() to return promise for the request
  *
  * @method promise
+ * @params {object} [options] Options
+ * @config {boolean} [cancellable=false] Return a cancellable promise
  * @return {Bluebird.Promise}
  */
-Request.prototype.promise = function() {
+Request.prototype.promise = function(options) {
   var self = this;
   var error;
-  return new Promise(function(resolve, reject) {
+
+  options = options || { cancellable: false };
+
+  var promise = new Promise(function(resolve, reject) {
       self.end(function(err, res) {
         if (typeof res !== "undefined" && res.status >= 400) {
           var msg = 'cannot ' + self.req.method + ' ' + self.req._headers.host + self.req.path + ' (' + res.status + ')';
@@ -49,4 +54,15 @@ Request.prototype.promise = function() {
         }
       });
     });
+
+  if (options.cancellable) {
+    promise = promise
+      .cancellable()
+      .catch(Promise.CancellationError, function(e) {
+        self.abort();
+        throw e;
+    });
+  }
+
+  return promise;
 };

@@ -1,5 +1,7 @@
 chai = require 'chai'
 expect = chai.expect
+sinon = require 'sinon'
+Promise = require 'bluebird'
 _ = require 'underscore'
 Interfake = require('interfake')
 interfake = new Interfake()
@@ -49,3 +51,64 @@ describe 'superagent-promise', ->
         expect(error).to.be.instanceof(Error)
         expect(error.name).to.equal("SuperagentPromiseError")
         expect(error.message.code).to.equal("ECONNREFUSED")
+
+  describe 'cancellable promises', ->
+    oldAbort = undefined
+    abortSpy = undefined
+
+    beforeEach ->
+      oldAbort = request.Request.prototype.abort
+      request.Request.prototype.abort = abortSpy = sinon.spy()
+
+    afterEach ->
+      request.Request.prototype.abort = oldAbort
+
+    describe 'cancel without reason', ->
+
+      it 'should abort the request when the promise is cancelled', (done) ->
+        request.get("localhost:3000/good")
+          .promise { cancellable: true }
+          .catch(->)
+          .cancel()
+
+        setImmediate ->
+          expect(abortSpy.called).to.be.true
+          done()
+
+      it 'should throw a bluebird CancellationError when the promise is cancelled without a reason', (done) ->
+        errorSpy = sinon.spy()
+
+        request.get("localhost:3000/good")
+          .promise { cancellable: true }
+          .catch errorSpy
+          .cancel()
+
+        setImmediate ->
+          expect(errorSpy.calledWith(sinon.match.instanceOf(Promise.CancellationError))).to.be.true
+          done()
+
+    describe 'cancel with reason that subclasses CancellationError', ->
+
+      class CustomCancellationError extends Promise.CancellationError
+
+      it 'should abort the request when the promise is cancelled', (done) ->
+        request.get("localhost:3000/good")
+          .promise { cancellable: true }
+          .catch(->)
+          .cancel new CustomCancellationError
+
+        setImmediate ->
+          expect(abortSpy.called).to.be.true
+          done()
+
+      it 'should throw a custom error when the promise is cancelled with a reason', (done) ->
+        errorSpy = sinon.spy()
+
+        request.get("localhost:3000/good")
+          .promise { cancellable: true }
+          .catch errorSpy
+          .cancel new CustomCancellationError
+
+        setImmediate ->
+          expect(errorSpy.calledWith(sinon.match.instanceOf(CustomCancellationError))).to.be.true
+          done()

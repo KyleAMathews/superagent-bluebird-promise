@@ -27,3 +27,35 @@ request.get('/an-endpoint').promise()
 An error is thrown for all HTTP errors and responses that have a response code of 400 or above.
 
 The `error` parameter always has a key `error` and for 4xx and 5xx responses, will also have a `status` and `res` key.
+
+## Options
+
+```js
+var promise = request.get('/an-endpoint').promise([options]);
+```
+
+### options.cancellable (boolean)
+
+```js
+var promise = request.get('/an-endpoint').promise({ cancellable: true });
+
+```
+
+#### Cancelling promises
+
+```js
+promise.cancel();
+```
+
+#### Cancelling promises with a custom reason
+
+**IMPORTANT:** The superagent request won't be [aborted](http://visionmedia.github.io/superagent/#aborting-requests) unless the custom reason class extends bluebird's [CancellationError](https://github.com/petkaantonov/bluebird/blob/master/API.md#cancellationerror).
+
+```js
+var Promise = require('bluebird');
+class CustomCancellationError extends Promise.CancellationError {
+  ...
+};
+
+promise.cancel(new CustomCancellationError());
+```
