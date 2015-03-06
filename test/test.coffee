@@ -58,7 +58,7 @@ describe 'superagent-promise', ->
         expect(error).to.be.instanceof(Error)
         expect(error.name).to.equal("SuperagentPromiseError")
         expect(error.message)
-          .to.equal("cannot GET example.com/does-not-exist (404)")
+          .to.equal("cannot GET http://example.com/does-not-exist (404)")
         done()
 
   it 'should reject an error object when there is an http error', ->
