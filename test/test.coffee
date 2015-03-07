@@ -73,15 +73,12 @@ describe 'superagent-promise', ->
         expect(error.message.code).to.equal("ECONNREFUSED")
 
   describe 'cancellable promises', ->
-    oldAbort = undefined
-    abortSpy = undefined
 
     beforeEach ->
-      oldAbort = request.Request.prototype.abort
-      request.Request.prototype.abort = abortSpy = sinon.spy()
+      sinon.stub request.Request.prototype, 'abort'
 
     afterEach ->
-      request.Request.prototype.abort = oldAbort
+      request.Request.prototype.abort.restore()
 
     describe 'cancel without reason', ->
 
@@ -92,7 +89,7 @@ describe 'superagent-promise', ->
           .cancel()
 
         setImmediate ->
-          expect(abortSpy.called).to.be.true
+          expect(request.Request.prototype.abort.called).to.be.true
           done()
 
       it 'should throw a bluebird CancellationError when the
@@ -121,7 +118,7 @@ describe 'superagent-promise', ->
           .cancel new CustomCancellationError
 
         setImmediate ->
-          expect(abortSpy.called).to.be.true
+          expect(request.Request.prototype.abort.called).to.be.true
           done()
 
       it 'should throw a custom error when the promise is
