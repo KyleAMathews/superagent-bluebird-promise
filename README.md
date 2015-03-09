@@ -1,3 +1,5 @@
+[![Build Status](https://img.shields.io/travis/KyleAMathews/superagent-bluebird-promise/master.svg?style=flat-square)](http://travis-ci.org/KyleAMathews/superagent-bluebird-promise)
+
 superagent-bluebird-promise
 ===========================
 
