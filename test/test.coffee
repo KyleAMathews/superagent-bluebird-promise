@@ -84,7 +84,7 @@ describe 'superagent-promise', ->
 
       it 'should abort the request when the promise is cancelled', (done) ->
         request.get("localhost:3000/good")
-          .promise { cancellable: true }
+          .promise()
           .catch(->)
           .cancel()
 
@@ -97,7 +97,7 @@ describe 'superagent-promise', ->
         errorSpy = sinon.spy()
 
         request.get("localhost:3000/good")
-          .promise { cancellable: true }
+          .promise()
           .catch errorSpy
           .cancel()
 
@@ -113,7 +113,7 @@ describe 'superagent-promise', ->
 
       it 'should abort the request when the promise is cancelled', (done) ->
         request.get("localhost:3000/good")
-          .promise { cancellable: true }
+          .promise()
           .catch(->)
           .cancel new CustomCancellationError
 
@@ -126,7 +126,7 @@ describe 'superagent-promise', ->
         errorSpy = sinon.spy()
 
         request.get("localhost:3000/good")
-          .promise { cancellable: true }
+          .promise()
           .catch errorSpy
           .cancel new CustomCancellationError
 

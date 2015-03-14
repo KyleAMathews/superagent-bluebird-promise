@@ -28,15 +28,11 @@ SuperagentPromiseError.prototype.constructor = SuperagentPromiseError;
  * Call .promise() to return promise for the request
  *
  * @method promise
- * @params {object} [options] Options
- * @config {boolean} [cancellable=false] Return a cancellable promise
  * @return {Bluebird.Promise}
  */
-Request.prototype.promise = function(options) {
+Request.prototype.promise = function() {
   var req = this;
   var error;
-
-  options = options || { cancellable: false };
 
   var promise = new Promise(function(resolve, reject) {
       req.end(function(err, res) {
@@ -53,16 +49,12 @@ Request.prototype.promise = function(options) {
           resolve(res);
         }
       });
+    })
+    .cancellable()
+    .catch(Promise.CancellationError, function(err) {
+      req.abort();
+      throw err;
     });
-
-  if (options.cancellable) {
-    promise = promise
-      .cancellable()
-      .catch(Promise.CancellationError, function(e) {
-        req.abort();
-        throw e;
-    });
-  }
 
   return promise;
 };
