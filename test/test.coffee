@@ -8,6 +8,7 @@ interfake = new Interfake()
 
 interfake.get('/good').body({message: 'ok'})
 interfake.get('/bad').status(400).body({error: 'not ok'})
+interfake.get('/not-found').status(404).body({error: 'not ok'})
 interfake.listen(3000) # The server will listen on port 3000
 
 request = require '../'
@@ -19,7 +20,6 @@ describe 'superagent-promise', ->
 
   it 'should resolve a res object when the returned statusCode is < 400', ->
     request.get("localhost:3000/good")
-      .promise()
       .then (res) ->
         expect(res).to.exist
         expect(res.status).to.equal(200)
@@ -28,7 +28,6 @@ describe 'superagent-promise', ->
   it 'should reject an error object when the
       returned statusCode is > 400', (done) ->
     request.get("localhost:3000/bad")
-      .promise()
       .then (res) ->
         expect(res).to.not.exist
       .catch (error) ->
@@ -45,8 +44,7 @@ describe 'superagent-promise', ->
 
   it 'should reject an error object when requesting
       non-existent page', (done) ->
-    request.get("http://example.com/does-not-exist")
-      .promise()
+    request.get("http://localhost:3000/not-found")
       .then (res) ->
         expect(res).to.not.exist
         done()
@@ -58,12 +56,11 @@ describe 'superagent-promise', ->
         expect(error).to.be.instanceof(Error)
         expect(error.name).to.equal("SuperagentPromiseError")
         expect(error.message)
-          .to.equal("cannot GET http://example.com/does-not-exist (404)")
+          .to.equal("cannot GET http://localhost:3000/not-found (404)")
         done()
 
   it 'should reject an error object when there is an http error', ->
     request.get("localhost:23423")
-      .promise()
       .then (res) ->
         expect(res).to.not.exist
       .catch (error) ->
@@ -72,7 +69,7 @@ describe 'superagent-promise', ->
         expect(error.name).to.equal("SuperagentPromiseError")
         expect(error.message.code).to.equal("ECONNREFUSED")
 
-  describe 'cancellable promises', ->
+  describe 'cancelling promises', ->
 
     beforeEach ->
       sinon.stub request.Request.prototype, 'abort'
@@ -84,8 +81,7 @@ describe 'superagent-promise', ->
 
       it 'should abort the request when the promise is cancelled', (done) ->
         request.get("localhost:3000/good")
-          .promise { cancellable: true }
-          .catch(->)
+          .then(null, ->)
           .cancel()
 
         setImmediate ->
@@ -97,7 +93,7 @@ describe 'superagent-promise', ->
         errorSpy = sinon.spy()
 
         request.get("localhost:3000/good")
-          .promise { cancellable: true }
+          .promise()
           .catch errorSpy
           .cancel()
 
@@ -113,8 +109,7 @@ describe 'superagent-promise', ->
 
       it 'should abort the request when the promise is cancelled', (done) ->
         request.get("localhost:3000/good")
-          .promise { cancellable: true }
-          .catch(->)
+          .then(null, ->)
           .cancel new CustomCancellationError
 
         setImmediate ->
@@ -126,7 +121,7 @@ describe 'superagent-promise', ->
         errorSpy = sinon.spy()
 
         request.get("localhost:3000/good")
-          .promise { cancellable: true }
+          .promise()
           .catch errorSpy
           .cancel new CustomCancellationError
 
