@@ -27,18 +27,14 @@ SuperagentPromiseError.prototype.constructor = SuperagentPromiseError;
  *
  * Call .promise() to return promise for the request
  *
- * @method promise
- * @params {object} [options] Options
- * @config {boolean} [cancellable=false] Return a cancellable promise
+ * @method then
  * @return {Bluebird.Promise}
  */
-Request.prototype.promise = function(options) {
+Request.prototype.promise = function() {
   var req = this;
   var error;
 
-  options = options || { cancellable: false };
-
-  var promise = new Promise(function(resolve, reject) {
+  return new Promise(function(resolve, reject) {
       req.end(function(err, res) {
         if (typeof res !== "undefined" && res.status >= 400) {
           var msg = 'cannot ' + req.method + ' ' + req.url + ' (' + res.status + ')';
@@ -53,16 +49,26 @@ Request.prototype.promise = function(options) {
           resolve(res);
         }
       });
+    })
+    .cancellable()
+    .catch(Promise.CancellationError, function(err) {
+      req.abort();
+      throw err;
     });
+};
 
-  if (options.cancellable) {
-    promise = promise
-      .cancellable()
-      .catch(Promise.CancellationError, function(e) {
-        req.abort();
-        throw e;
-    });
-  }
-
-  return promise;
+/**
+ *
+ * Make superagent requests Promises/A+ conformant
+ *
+ * Call .then([onFulfilled], [onRejected]) to register callbacks
+ *
+ * @method then
+ * @param {function} [onFulfilled]
+ * @param {function} [onRejected]
+ * @return {Bluebird.Promise}
+ */
+Request.prototype.then = function() {
+  var promise = this.promise();
+  return promise.then.apply(promise, arguments);
 };

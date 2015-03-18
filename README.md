@@ -11,53 +11,43 @@ Add promise support to
 `npm install superagent-bluebird-promise`
 
 ## Usage
-Simply require this package instead of `superagent`. Then you can call `.promise()` instead of `.end()` to get a promise for your requests.
+Simply require this package instead of `superagent`. Then you can call `.then()` instead of `.end()` to get a promise for your requests.
 
 ```javascript
-
 var request = require('superagent-bluebird-promise');
 
-request.get('/an-endpoint').promise()
+request.get('/an-endpoint')
   .then(function(res) {
     console.log(res);
-  })
-  .catch(function(error) {
+  }, function(error) {
     console.log(error);
-  })
-  ```
+  });
+```
+
+To generate a promise without registering any callbacks (e.g. when returning a promise from within a library), call `.promise()` instead.
+
+```javascript
+request.get('/an-endpoint').promise()
+```
+
+In order to use any of Bluebird's various promise methods, make sure you call `.then()` or `.promise()` first.
 
 An error is thrown for all HTTP errors and responses that have a response code of 400 or above.
 
 The `error` parameter always has a key `error` and for 4xx and 5xx responses, will also have a `status` and `res` key.
 
-## Options
+## Cancelling requests
 
-```js
-var promise = request.get('/an-endpoint').promise([options]);
-```
-
-### options.cancellable (boolean)
-
-```js
-var promise = request.get('/an-endpoint').promise({ cancellable: true });
-
-```
-
-#### Cancelling promises
+You can [abort the request](http://visionmedia.github.io/superagent/#aborting-requests) by [cancelling the promise](https://github.com/petkaantonov/bluebird/blob/master/API.md#cancelerror-reason---promise):
 
 ```js
 promise.cancel();
 ```
 
-#### Cancelling promises with a custom reason
+When aborting the request with a [custom reason](https://github.com/petkaantonov/bluebird/blob/master/API.md#cancelerror-reason---promise), make sure your error class inherits from Bluebird's [CancellationError class](https://github.com/petkaantonov/bluebird/blob/master/API.md#cancellationerror) or the request won't be aborted.
 
-**IMPORTANT:** The superagent request won't be [aborted](http://visionmedia.github.io/superagent/#aborting-requests) unless the custom reason class extends bluebird's [CancellationError](https://github.com/petkaantonov/bluebird/blob/master/API.md#cancellationerror).
+This is only possible because all promises are [cancellable](https://github. com/petkaantonov/bluebird/blob/master/API.md#cancellable---promise) by default. To disable this functionality, call Bluebird's [uncancellable](https://github.com/petkaantonov/bluebird/blob/master/API.md#uncancellable---promise) method on the promise:
 
 ```js
-var Promise = require('bluebird');
-class CustomCancellationError extends Promise.CancellationError {
-  ...
-};
-
-promise.cancel(new CustomCancellationError());
+promise.uncancellable();
 ```
