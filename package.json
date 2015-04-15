@@ -27,17 +27,17 @@
     "test": "node_modules/.bin/coffeelint test/* & jshint *.json *.js & NODE_ENV=test node_modules/.bin/mocha --recursive --compilers coffee:coffee-script/register -R mocha-unfunk-reporter"
   },
   "devDependencies": {
-    "bluebird": "^2.9.21",
-    "chai": "^2.1.1",
-    "coffee-script": "^1.9.1",
-    "coffeelint": "^1.9.2",
+    "bluebird": "^2.9.24",
+    "chai": "^2.2.0",
+    "coffee-script": "^1.9.2",
+    "coffeelint": "^1.9.3",
     "interfake": "^1.12.1",
-    "jshint": "^2.6.3",
-    "mocha": "^2.2.1",
+    "jshint": "^2.7.0",
+    "mocha": "^2.2.4",
     "mocha-unfunk-reporter": "^0.4.0",
     "pre-commit": "^1.0.6",
-    "sinon": "^1.13.0",
-    "superagent": "^1.1.0",
-    "underscore": "^1.8.2"
+    "sinon": "^1.14.1",
+    "superagent": "^1.2.0",
+    "underscore": "^1.8.3"
   }
 }
