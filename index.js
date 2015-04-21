@@ -8,10 +8,10 @@ var Request = superagent.Request;
 
 // Create custom error type.
 // Create a new object, that prototypally inherits from the Error constructor.
-function SuperagentPromiseError(message) {
+var SuperagentPromiseError = superagent.SuperagentPromiseError = function (message) {
   this.name = 'SuperagentPromiseError';
   this.message = message || 'Bad request';
-}
+};
 
 SuperagentPromiseError.prototype = new Error();
 SuperagentPromiseError.prototype.constructor = SuperagentPromiseError;
