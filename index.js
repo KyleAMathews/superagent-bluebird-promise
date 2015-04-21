@@ -51,7 +51,7 @@ Request.prototype.promise = function() {
       });
     })
     .cancellable()
-    ['catch'](Promise.CancellationError, function(err) {
+    .caught(Promise.CancellationError, function(err) {
       req.abort();
       throw err;
     });
