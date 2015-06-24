@@ -67,7 +67,14 @@ describe 'superagent-promise', ->
         expect(error).to.exist
         expect(error).to.be.instanceof(Error)
         expect(error.name).to.equal("SuperagentPromiseError")
-        expect(error.message.code).to.equal("ECONNREFUSED")
+        expect(error.code).to.equal("ECONNREFUSED")
+
+  it 'should have a correct stack trace when there is an http error', ->
+    request.get("localhost:23423")
+      .then (res) ->
+        expect(res).to.not.exist
+      .catch (error) ->
+        expect(error.stack).to.contain("Error: connect ECONNREFUSED")
 
   describe 'cancelling promises', ->
 

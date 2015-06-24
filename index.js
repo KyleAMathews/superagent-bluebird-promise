@@ -6,16 +6,6 @@ var Promise = require("bluebird");
 var superagent = module.exports = require("superagent");
 var Request = superagent.Request;
 
-// Create custom error type.
-// Create a new object, that prototypally inherits from the Error constructor.
-var SuperagentPromiseError = superagent.SuperagentPromiseError = function (message) {
-  this.name = 'SuperagentPromiseError';
-  this.message = message || 'Bad request';
-};
-
-SuperagentPromiseError.prototype = new Error();
-SuperagentPromiseError.prototype.constructor = SuperagentPromiseError;
-
 /**
  * @namespace utils
  * @class Superagent
@@ -38,13 +28,15 @@ Request.prototype.promise = function() {
       req.end(function(err, res) {
         if (typeof res !== "undefined" && res.status >= 400) {
           var msg = 'cannot ' + req.method + ' ' + req.url + ' (' + res.status + ')';
-          error = new SuperagentPromiseError(msg);
+          error = new Error(msg || 'Bad request');
+          error.name = 'SuperagentPromiseError';
           error.status = res.status;
           error.body = res.body;
           error.res = res;
           reject(error);
         } else if (err) {
-          reject(new SuperagentPromiseError(err));
+          err.name = 'SuperagentPromiseError';
+          reject(err);
         } else {
           resolve(res);
         }
