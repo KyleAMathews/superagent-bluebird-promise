@@ -66,15 +66,28 @@ describe 'superagent-promise', ->
       .catch (error) ->
         expect(error).to.exist
         expect(error).to.be.instanceof(Error)
+        expect(error).to.be.instanceof(request.SuperagentPromiseError)
         expect(error.name).to.equal("SuperagentPromiseError")
-        expect(error.code).to.equal("ECONNREFUSED")
+        expect(error.childError.code).to.equal("ECONNREFUSED")
 
-  it 'should have a correct stack trace when there is an http error', ->
-    request.get("localhost:23423")
-      .then (res) ->
-        expect(res).to.not.exist
-      .catch (error) ->
-        expect(error.stack).to.contain("Error: connect ECONNREFUSED")
+  describe 'request.SuperagentPromiseError', ->
+    SuperagentPromiseError = request.SuperagentPromiseError
+
+    it 'should have a childError property if a child error is provided', ->
+      error = new SuperagentPromiseError('test', new Error('childError'))
+      expect(error).to.be.instanceof(Error)
+      expect(error).to.be.instanceof(SuperagentPromiseError)
+      expect(error.name).to.equal('SuperagentPromiseError')
+      expect(error.childError).to.exist
+      expect(error.childError).to.be.instanceof(Error)
+
+    it 'should have a stack trace that includes the childError stacktrace', ->
+      childError = new Error('abc')
+      childError.stack = '---childstack---'
+      superagentError = new SuperagentPromiseError('def', childError)
+      expect(superagentError.stack).to.contain(
+        '\nCaused by:  ---childstack---'
+      )
 
   describe 'cancelling promises', ->
 
