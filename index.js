@@ -8,11 +8,11 @@ var Request = superagent.Request;
 
 // Create custom error type.
 // Create a new object, that prototypally inherits from the Error constructor.
-var SuperagentPromiseError = function(message, childError) {
+var SuperagentPromiseError = function(message, originalError) {
   var stack;
   this.message = message;
   this.name = 'SuperagentPromiseError';
-  this.childError = childError;
+  this.originalError = originalError;
 
   if (Error.captureStackTrace) {
     Error.captureStackTrace(this, this.constructor);
@@ -22,15 +22,17 @@ var SuperagentPromiseError = function(message, childError) {
     stack = (new Error(message)).stack;
   }
 
-  Object.defineProperty(this, 'stack', {
-    get: function() {
-      if (childError) {
-        return stack + '\nCaused by:  ' + this.childError.stack;
-      }
+  if (Object.defineProperty) {
+    Object.defineProperty(this, 'stack', {
+      get: function() {
+        if (this.originalError) {
+          return stack + '\nCaused by:  ' + this.originalError.stack;
+        }
 
-      return stack;
-    }
-  });
+        return stack;
+      }
+    });
+  }
 };
 
 SuperagentPromiseError.prototype = new Error();
