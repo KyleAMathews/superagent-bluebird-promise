@@ -66,8 +66,28 @@ describe 'superagent-promise', ->
       .catch (error) ->
         expect(error).to.exist
         expect(error).to.be.instanceof(Error)
+        expect(error).to.be.instanceof(request.SuperagentPromiseError)
         expect(error.name).to.equal("SuperagentPromiseError")
-        expect(error.message.code).to.equal("ECONNREFUSED")
+        expect(error.originalError.code).to.equal("ECONNREFUSED")
+
+  describe 'request.SuperagentPromiseError', ->
+    SuperagentPromiseError = request.SuperagentPromiseError
+
+    it 'should have a originalError property if a child error is provided', ->
+      error = new SuperagentPromiseError('test', new Error('originalError'))
+      expect(error).to.be.instanceof(Error)
+      expect(error).to.be.instanceof(SuperagentPromiseError)
+      expect(error.name).to.equal('SuperagentPromiseError')
+      expect(error.originalError).to.exist
+      expect(error.originalError).to.be.instanceof(Error)
+
+    it 'should have a stack trace that includes the originalError stacktrace', ->
+      originalError = new Error('abc')
+      originalError.stack = '---originalErrorStack---'
+      superagentError = new SuperagentPromiseError('def', originalError)
+      expect(superagentError.stack).to.contain(
+        '\nCaused by:  ---originalErrorStack---'
+      )
 
   describe 'cancelling promises', ->
 

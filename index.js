@@ -8,13 +8,36 @@ var Request = superagent.Request;
 
 // Create custom error type.
 // Create a new object, that prototypally inherits from the Error constructor.
-var SuperagentPromiseError = superagent.SuperagentPromiseError = function (message) {
+var SuperagentPromiseError = function(message, originalError) {
+  var stack;
+  this.message = message;
   this.name = 'SuperagentPromiseError';
-  this.message = message || 'Bad request';
+  this.originalError = originalError;
+
+  if (Error.captureStackTrace) {
+    Error.captureStackTrace(this, this.constructor);
+    stack = this.stack;
+  }
+  else {
+    stack = (new Error(message)).stack;
+  }
+
+  if (Object.defineProperty) {
+    Object.defineProperty(this, 'stack', {
+      get: function() {
+        if (this.originalError) {
+          return stack + '\nCaused by:  ' + this.originalError.stack;
+        }
+
+        return stack;
+      }
+    });
+  }
 };
 
 SuperagentPromiseError.prototype = new Error();
 SuperagentPromiseError.prototype.constructor = SuperagentPromiseError;
+superagent.SuperagentPromiseError = SuperagentPromiseError;
 
 /**
  * @namespace utils
@@ -44,7 +67,7 @@ Request.prototype.promise = function() {
           error.res = res;
           reject(error);
         } else if (err) {
-          reject(new SuperagentPromiseError(err));
+          reject(new SuperagentPromiseError('Bad request', err));
         } else {
           resolve(res);
         }
