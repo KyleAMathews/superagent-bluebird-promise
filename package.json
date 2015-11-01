@@ -27,7 +27,7 @@
     "test": "node_modules/.bin/coffeelint test/* & jshint *.json *.js & NODE_ENV=test node_modules/.bin/mocha --recursive --compilers coffee:coffee-script/register -R mocha-unfunk-reporter"
   },
   "devDependencies": {
-    "bluebird": "^2.9.24",
+    "bluebird": "^3.0.3",
     "chai": "^3.3.0",
     "coffee-script": "^1.9.2",
     "coffeelint": "^1.9.3",
