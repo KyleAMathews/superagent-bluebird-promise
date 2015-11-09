@@ -108,21 +108,6 @@ describe 'superagent-promise', ->
           expect(request.Request.prototype.abort.called).to.be.true
           done()
 
-      it 'should throw a bluebird CancellationError when the
-          promise is cancelled without a reason', (done) ->
-        errorSpy = sinon.spy()
-
-        request.get("localhost:3000/good")
-          .promise()
-          .catch errorSpy
-          .cancel()
-
-        setImmediate ->
-          expect(errorSpy.calledWith(
-            sinon.match.instanceOf(Promise.CancellationError))
-          ).to.be.true
-          done()
-
     describe 'cancel with reason that subclasses CancellationError', ->
 
       class CustomCancellationError extends Promise.CancellationError
@@ -134,19 +119,4 @@ describe 'superagent-promise', ->
 
         setImmediate ->
           expect(request.Request.prototype.abort.called).to.be.true
-          done()
-
-      it 'should throw a custom error when the promise is
-          cancelled with a reason', (done) ->
-        errorSpy = sinon.spy()
-
-        request.get("localhost:3000/good")
-          .promise()
-          .catch errorSpy
-          .cancel new CustomCancellationError
-
-        setImmediate ->
-          expect(errorSpy.calledWith(
-            sinon.match.instanceOf(CustomCancellationError)
-          )).to.be.true
-          done()
+          done()      
