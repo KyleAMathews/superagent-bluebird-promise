@@ -15,8 +15,8 @@
   "license": "MIT",
   "main": "index.js",
   "peerDependencies": {
-    "bluebird": "*",
-    "superagent": "*"
+    "bluebird": "2.x",
+    "superagent": "1.x"
   },
   "repository": {
     "type": "git",
