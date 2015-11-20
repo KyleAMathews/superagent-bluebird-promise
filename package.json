@@ -1,7 +1,7 @@
 {
   "name": "superagent-bluebird-promise",
   "description": "Add promise support to superagent using Bluebird",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "bugs": {
     "url": "https://github.com/KyleAMathews/superagent-bluebird-promise/issues"
