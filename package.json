@@ -24,7 +24,7 @@
   },
   "scripts": {
     "test-watch": "NODE_ENV=test node_modules/.bin/mocha -w --recursive --compilers coffee:coffee-script/register -R mocha-unfunk-reporter",
-    "test": "node_modules/.bin/coffeelint test/* & jshint *.json *.js & NODE_ENV=test node_modules/.bin/mocha --recursive --compilers coffee:coffee-script/register -R mocha-unfunk-reporter"
+    "test": "node_modules/.bin/coffeelint test/* & jshint *.json *.js && NODE_ENV=test node_modules/.bin/mocha --recursive --compilers coffee:coffee-script/register -R mocha-unfunk-reporter"
   },
   "devDependencies": {
     "bluebird": "^2.9.24",
