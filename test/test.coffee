@@ -81,7 +81,7 @@ describe 'superagent-promise', ->
       expect(error.originalError).to.exist
       expect(error.originalError).to.be.instanceof(Error)
 
-    it 'should have a stack trace that includes the originalError stacktrace', ->
+    it 'should include the originalError stacktrace', ->
       originalError = new Error('abc')
       originalError.stack = '---originalErrorStack---'
       superagentError = new SuperagentPromiseError('def', originalError)
