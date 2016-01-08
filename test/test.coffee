@@ -119,4 +119,4 @@ describe 'superagent-promise', ->
 
         setImmediate ->
           expect(request.Request.prototype.abort.called).to.be.true
-          done()      
+          done()
