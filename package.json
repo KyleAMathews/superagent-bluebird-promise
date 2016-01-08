@@ -1,7 +1,7 @@
 {
   "name": "superagent-bluebird-promise",
   "description": "Add promise support to superagent using Bluebird",
-  "version": "2.1.1",
+  "version": "3.0.0",
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "bugs": {
     "url": "https://github.com/KyleAMathews/superagent-bluebird-promise/issues"
@@ -15,7 +15,7 @@
   "license": "MIT",
   "main": "index.js",
   "peerDependencies": {
-    "bluebird": "2.x",
+    "bluebird": "3.x",
     "superagent": "1.x"
   },
   "repository": {
@@ -27,7 +27,7 @@
     "test": "node_modules/.bin/coffeelint test/* & jshint *.json *.js && NODE_ENV=test node_modules/.bin/mocha --recursive --compilers coffee:coffee-script/register -R mocha-unfunk-reporter"
   },
   "devDependencies": {
-    "bluebird": "^2.9.24",
+    "bluebird": "^3.0.5",
     "chai": "^3.3.0",
     "coffee-script": "^1.9.2",
     "coffeelint": "^1.9.3",
