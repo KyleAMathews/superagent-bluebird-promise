@@ -44,10 +44,4 @@ You can [abort the request](http://visionmedia.github.io/superagent/#aborting-re
 promise.cancel();
 ```
 
-When aborting the request with a [custom reason](https://github.com/petkaantonov/bluebird/blob/master/API.md#cancelerror-reason---promise), make sure your error class inherits from Bluebird's [CancellationError class](https://github.com/petkaantonov/bluebird/blob/master/API.md#cancellationerror) or the request won't be aborted.
-
-This is only possible because all promises are [cancellable](https://github.com/petkaantonov/bluebird/blob/master/API.md#cancellable---promise) by default. To disable this functionality, call Bluebird's [uncancellable](https://github.com/petkaantonov/bluebird/blob/master/API.md#uncancellable---promise) method on the promise:
-
-```js
-promise.uncancellable();
-```
+This is only possible because  we have configured bluebird to be [cancellable](http://bluebirdjs.com/docs/api/promise.config.html) by default.
