@@ -6,10 +6,20 @@ var Promise = require("bluebird");
 var superagent = module.exports = require("superagent");
 var Request = superagent.Request;
 
-Promise.config({
+try {
+  Promise.config({
     // Enable cancellation.
     cancellation: true
-});
+  });
+} catch (e) {
+  console.warn([
+    'Enabling bluebird cancellation failed.',
+    'If you are using bluebird elsewhere in your application,',
+    'be sure to enable cancellation there as well.',
+    'Promise.config({cancellation: true});'].join(' ')
+  );
+  console.warn(e.stack);
+}
 // Create custom error type.
 // Create a new object, that prototypally inherits from the Error constructor.
 var SuperagentPromiseError = function(message, originalError) {
@@ -76,10 +86,12 @@ Request.prototype.promise = function() {
           resolve(res);
         }
       });
-      onCancel(function() {
-        req.abort();
-       });
 
+      if (typeof onCancel === 'function') {
+        onCancel(function() {
+          req.abort();
+        });
+      }
     });
 };
 
