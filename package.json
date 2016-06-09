@@ -16,7 +16,7 @@
   "main": "index.js",
   "peerDependencies": {
     "bluebird": "3.x",
-    "superagent": "1.x"
+    "superagent": ">=1.x"
   },
   "repository": {
     "type": "git",
