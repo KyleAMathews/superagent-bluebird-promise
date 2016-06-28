@@ -9,7 +9,7 @@ interfake = new Interfake()
 interfake.get('/good').body({message: 'ok'})
 interfake.get('/bad').status(400).body({error: 'not ok'})
 interfake.get('/not-found').status(404).body({error: 'not ok'})
-interfake.listen(3000) # The server will listen on port 3000
+interfake.listen(31231) # The server will listen on port 31231
 
 request = require '../'
 
@@ -18,16 +18,17 @@ describe 'superagent-promise', ->
   it 'should exist', ->
     expect(request).to.exist
 
-  it 'should resolve a res object when the returned statusCode is < 400', ->
-    request.get("localhost:3000/good")
+  it 'should resolve a res object when returned statusCode is < 400', (done) ->
+    request.get("localhost:31231/good")
       .then (res) ->
         expect(res).to.exist
         expect(res.status).to.equal(200)
         expect(res.body.message).to.equal('ok')
+        done()
 
   it 'should reject an error object when the
       returned statusCode is > 400', (done) ->
-    request.get("localhost:3000/bad")
+    request.get("localhost:31231/bad")
       .then (res) ->
         expect(res).to.not.exist
       .catch (error) ->
@@ -39,15 +40,14 @@ describe 'superagent-promise', ->
         expect(error.body.error).to.equal('not ok')
         expect(error).to.be.instanceof(Error)
         expect(error.name).to.equal("SuperagentPromiseError")
-        expect(error.message).to.equal("cannot GET localhost:3000/bad (400)")
+        expect(error.message).to.equal("cannot GET localhost:31231/bad (400)")
         done()
 
   it 'should reject an error object when requesting
       non-existent page', (done) ->
-    request.get("http://localhost:3000/not-found")
+    request.get("http://localhost:31231/not-found")
       .then (res) ->
         expect(res).to.not.exist
-        done()
       .catch (error) ->
         expect(error).to.exist
         expect(error.res).to.exist
@@ -56,10 +56,10 @@ describe 'superagent-promise', ->
         expect(error).to.be.instanceof(Error)
         expect(error.name).to.equal("SuperagentPromiseError")
         expect(error.message)
-          .to.equal("cannot GET http://localhost:3000/not-found (404)")
+          .to.equal("cannot GET http://localhost:31231/not-found (404)")
         done()
 
-  it 'should reject an error object when there is an http error', ->
+  it 'should reject an error object when there is an http error', (done) ->
     request.get("localhost:23423")
       .then (res) ->
         expect(res).to.not.exist
@@ -69,6 +69,7 @@ describe 'superagent-promise', ->
         expect(error).to.be.instanceof(request.SuperagentPromiseError)
         expect(error.name).to.equal("SuperagentPromiseError")
         expect(error.originalError.code).to.equal("ECONNREFUSED")
+        done()
 
   describe 'request.SuperagentPromiseError', ->
     SuperagentPromiseError = request.SuperagentPromiseError
@@ -100,7 +101,7 @@ describe 'superagent-promise', ->
     describe 'cancel without reason', ->
 
       it 'should abort the request when the promise is cancelled', (done) ->
-        request.get("localhost:3000/good")
+        request.get("localhost:31231/good")
           .then(null, ->)
           .cancel()
 
@@ -113,7 +114,7 @@ describe 'superagent-promise', ->
       class CustomCancellationError extends Promise.CancellationError
 
       it 'should abort the request when the promise is cancelled', (done) ->
-        request.get("localhost:3000/good")
+        request.get("localhost:31231/good")
           .then(null, ->)
           .cancel new CustomCancellationError
 
