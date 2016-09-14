@@ -33,7 +33,7 @@
     "coffeelint": "^1.9.3",
     "interfake": "^1.12.1",
     "jshint": "^2.7.0",
-    "mocha": "^2.2.4",
+    "mocha": "^3.0.1",
     "mocha-unfunk-reporter": "^0.4.0",
     "pre-commit": "^1.0.6",
     "sinon": "^1.14.1",
