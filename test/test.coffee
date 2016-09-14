@@ -25,6 +25,7 @@ describe 'superagent-promise', ->
         expect(res.status).to.equal(200)
         expect(res.body.message).to.equal('ok')
         done()
+    return
 
   it 'should reject an error object when the
       returned statusCode is > 400', (done) ->
@@ -42,6 +43,7 @@ describe 'superagent-promise', ->
         expect(error.name).to.equal("SuperagentPromiseError")
         expect(error.message).to.equal("cannot GET localhost:31231/bad (400)")
         done()
+    return
 
   it 'should reject an error object when requesting
       non-existent page', (done) ->
@@ -58,6 +60,7 @@ describe 'superagent-promise', ->
         expect(error.message)
           .to.equal("cannot GET http://localhost:31231/not-found (404)")
         done()
+    return
 
   it 'should reject an error object when there is an http error', (done) ->
     request.get("localhost:23423")
@@ -70,6 +73,7 @@ describe 'superagent-promise', ->
         expect(error.name).to.equal("SuperagentPromiseError")
         expect(error.originalError.code).to.equal("ECONNREFUSED")
         done()
+    return
 
   describe 'request.SuperagentPromiseError', ->
     SuperagentPromiseError = request.SuperagentPromiseError
