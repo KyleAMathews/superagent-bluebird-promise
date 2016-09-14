@@ -62,6 +62,13 @@ describe 'superagent-promise', ->
         done()
     return
 
+  it 'should expose a catch method on the request object', (done) ->
+    request.get("http://localhost:3000/not-found")
+      .catch (error) ->
+        expect(error).to.exist
+        done()
+    return
+
   it 'should reject an error object when there is an http error', (done) ->
     request.get("localhost:23423")
       .then (res) ->

@@ -85,7 +85,7 @@ Request.prototype.promise = function() {
 
 /**
  *
- * Make superagent requests Promises/A+ conformant
+ * Make superagent requests Promises ES6 conformant
  *
  * Call .then([onFulfilled], [onRejected]) to register callbacks
  *
@@ -97,4 +97,19 @@ Request.prototype.promise = function() {
 Request.prototype.then = function() {
   var promise = this.promise();
   return promise.then.apply(promise, arguments);
+};
+
+/**
+ *
+ * Make superagent requests Promises ES6 conformant
+ *
+ * Call .catch([onRejected]) to register callback
+ *
+ * @method catch
+ * @param {function} [onRejected]
+ * @return {Bluebird.Promise}
+ */
+Request.prototype.catch = function() {
+  var promise = this.promise();
+  return promise.catch.apply(promise, arguments);
 };
