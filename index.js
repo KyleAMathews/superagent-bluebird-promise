@@ -81,7 +81,7 @@ Request.prototype.promise = function() {
           error.res = res;
           reject(error);
         } else if (err) {
-          reject(new SuperagentPromiseError('Bad request', err));
+          reject(new SuperagentPromiseError(err.message, err));
         } else {
           resolve(res);
         }
