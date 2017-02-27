@@ -25,7 +25,6 @@ try {
 var SuperagentPromiseError = function(message, originalError) {
   var stack;
   this.message = message;
-  this.name = 'SuperagentPromiseError';
   this.originalError = originalError;
 
   if (Error.captureStackTrace) {
@@ -38,12 +37,16 @@ var SuperagentPromiseError = function(message, originalError) {
 
   if (Object.defineProperty) {
     Object.defineProperty(this, 'stack', {
+      configurable: true, // required for Bluebird long stack traces
       get: function() {
         if (this.originalError) {
           return stack + '\nCaused by:  ' + this.originalError.stack;
         }
 
         return stack;
+      },
+      set: function(value) {
+        stack = value;
       }
     });
   }
@@ -51,6 +54,7 @@ var SuperagentPromiseError = function(message, originalError) {
 
 SuperagentPromiseError.prototype = new Error();
 SuperagentPromiseError.prototype.constructor = SuperagentPromiseError;
+SuperagentPromiseError.prototype.name = 'SuperagentPromiseError';
 superagent.SuperagentPromiseError = SuperagentPromiseError;
 
 /**
