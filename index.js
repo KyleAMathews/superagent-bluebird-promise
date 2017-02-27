@@ -12,11 +12,13 @@ try {
     cancellation: true
   });
 } catch (e) {
-  console.warn([
-    'Enabling bluebird cancellation failed.',
-    'If you are using bluebird elsewhere in your application,',
-    'be sure to enable cancellation there as well.',
-    'Promise.config({cancellation: true});'].join(' ')
+  console.warn(
+    [
+      "Enabling bluebird cancellation failed.",
+      "If you are using bluebird elsewhere in your application,",
+      "be sure to enable cancellation there as well.",
+      "Promise.config({cancellation: true});"
+    ].join(" ")
   );
   console.warn(e.stack);
 }
@@ -30,17 +32,16 @@ var SuperagentPromiseError = function(message, originalError) {
   if (Error.captureStackTrace) {
     Error.captureStackTrace(this, this.constructor);
     stack = this.stack;
-  }
-  else {
-    stack = (new Error(message)).stack;
+  } else {
+    stack = new Error(message).stack;
   }
 
   if (Object.defineProperty) {
-    Object.defineProperty(this, 'stack', {
+    Object.defineProperty(this, "stack", {
       configurable: true, // required for Bluebird long stack traces
       get: function() {
         if (this.originalError) {
-          return stack + '\nCaused by:  ' + this.originalError.stack;
+          return stack + "\nCaused by:  " + this.originalError.stack;
         }
 
         return stack;
@@ -54,7 +55,7 @@ var SuperagentPromiseError = function(message, originalError) {
 
 SuperagentPromiseError.prototype = new Error();
 SuperagentPromiseError.prototype.constructor = SuperagentPromiseError;
-SuperagentPromiseError.prototype.name = 'SuperagentPromiseError';
+SuperagentPromiseError.prototype.name = "SuperagentPromiseError";
 superagent.SuperagentPromiseError = SuperagentPromiseError;
 
 /**
@@ -76,27 +77,33 @@ Request.prototype.promise = function() {
   var error;
 
   return new Promise(function(resolve, reject, onCancel) {
-      req.end(function(err, res) {
-        if (typeof res !== "undefined" && res !== null && res.status >= 400) {
-          var msg = 'cannot ' + req.method + ' ' + req.url + ' (' + res.status + ')';
-          error = new SuperagentPromiseError(msg);
-          error.status = res.status;
-          error.body = res.body;
-          error.res = res;
-          reject(error);
-        } else if (err) {
-          reject(new SuperagentPromiseError(err.message, err));
-        } else {
-          resolve(res);
-        }
-      });
-
-      if (typeof onCancel === 'function') {
-        onCancel(function() {
-          req.abort();
-        });
+    req.end(function(err, res) {
+      if (typeof res !== "undefined" && res !== null && res.status >= 400) {
+        var msg = "cannot " +
+          req.method +
+          " " +
+          req.url +
+          " (" +
+          res.status +
+          ")";
+        error = new SuperagentPromiseError(msg);
+        error.status = res.status;
+        error.body = res.body;
+        error.res = res;
+        reject(error);
+      } else if (err) {
+        reject(new SuperagentPromiseError(err.message, err));
+      } else {
+        resolve(res);
       }
     });
+
+    if (typeof onCancel === "function") {
+      onCancel(function() {
+        req.abort();
+      });
+    }
+  });
 };
 
 /**
